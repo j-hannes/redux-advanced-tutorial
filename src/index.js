@@ -1,7 +1,7 @@
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import {createStore, applyMiddleware} from 'redux'
-import {/*selectReddit, */fetchPosts} from './actions'
+import {/*selectReddit, */fetchPostsIfNeeded} from './actions'
 import rootReducer from './reducers'
 
 const loggerMiddleware = createLogger()
@@ -14,7 +14,7 @@ const createStoreWithMiddleware = applyMiddleware(
 const store = createStoreWithMiddleware(rootReducer)
 
 // store.dispatch(selectReddit('reactjs'))
-store.dispatch(fetchPosts('reactjs')).then(() =>
+store.dispatch(fetchPostsIfNeeded('reactjs')).then(() =>
   /* eslint no-console: 0 */
   console.log(store.getState())
 )

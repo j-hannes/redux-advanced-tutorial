@@ -34,7 +34,28 @@ function receivePosts(reddit, json) {
   }
 }
 
-export function fetchPosts(reddit) {
+export function fetchPostsIfNeeded(reddit) {
+  return (dispatch, getState) => {
+    if (shouldFetchPosts(getState(), reddit)) {
+      return dispatch(fetchPosts(reddit))
+    } else {
+      return Promise.resolve()
+    }
+  }
+}
+
+function shouldFetchPosts(state, reddit) {
+  const posts = state.postsByReddit[reddit]
+  if (!posts) {
+    return true
+  } else if (posts.isFetching) {
+    return false
+  } else {
+    return posts.didInvalidate
+  }
+}
+
+function fetchPosts(reddit) {
   return function(dispatch) {
     dispatch(requestPosts)
     return fetch(`http://www.reddit.com/r/${reddit}.json`)
